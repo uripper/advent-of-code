@@ -39,8 +39,7 @@ def count_fresh_range(ranges:list[tuple[int, ...]]) -> int:
     count = 0
     highest_number: int = -999999999999999
     for working_range in ranges:
-        if not highest_number > working_range[0]:
-            highest_number = working_range[0]
+        highest_number = max(highest_number, working_range[0])
         count += max(0, working_range[1] - highest_number + 1)
         if highest_number < working_range[1] + 1:
             highest_number = working_range[1] + 1
