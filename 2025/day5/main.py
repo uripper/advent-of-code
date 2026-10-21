@@ -5,34 +5,30 @@ with open("test.txt") as f:
     test = f.read()
 
 
-def preprocess(data:str) -> tuple[list[tuple[int, ...]], set[int]]:
+def preprocess(data: str) -> tuple[list[tuple[int, int]], set[int]]:
+    lines = data.strip().splitlines()
+    split_index = lines.index("")
 
-    split_data = data.split("\n")
-    split_index = split_data.index("")
-    ranges: list[tuple[int, ...]] = [
-        tuple(map(int, string.split("-")))
-        for string in split_data[:split_index]
-        ]
+    ranges: list[tuple[int, int]] = []
+    for line in lines[:split_index]:
+        start, end = map(int, line.split("-"))
+        ranges.append((start, end))
 
     ranges.sort()
-    ingredients = set(map(int, split_data[split_index+1:]))
 
-    return (ranges, ingredients)
+    ingredients = set(map(int, lines[split_index + 1:]))
 
-def get_set(ranges:list[str], ingredients) -> int:
+    return ranges, ingredients
 
-    fresh_numbers_count: int = 0
-    ingredients_dup = ingredients.copy()
-
-    for first_range in ranges:
-        first_number, last_number = map(int, first_range.split("-"))
-        ingredients = ingredients_dup.copy()      
-        for number in ingredients:
-           if first_number <= number <= last_number:
-               fresh_numbers_count += 1
-               ingredients_dup.remove(number)
-
-    return fresh_numbers_count
+# Part 1
+def count_fresh_ingredients(
+    ranges: list[tuple[int, int]],
+    ingredients: set[int]
+) -> int:
+    return sum(
+        any(start <= ingredient <= end for start, end in ranges)
+        for ingredient in ingredients
+    )
 
 # Part 2
 def count_fresh_range(ranges:list[tuple[int, ...]]) -> int:
@@ -47,10 +43,7 @@ def count_fresh_range(ranges:list[tuple[int, ...]]) -> int:
     return count
 
 if __name__ == "__main__":
-    data = test
+    ranges, ingredients = preprocess(test)
 
-    ranges, _ = preprocess(data)
-    fresh_numbers = count_fresh_range(ranges)
-    print("COUNT IS:")
-    print(fresh_numbers)
-
+    print(f"Part 1: {count_fresh_ingredients(ranges, ingredients)}")
+    print(f"Part 2: {count_fresh_range(ranges)}")
