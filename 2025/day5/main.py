@@ -31,14 +31,13 @@ def count_fresh_ingredients(
     )
 
 # Part 2
-def count_fresh_range(ranges:list[tuple[int, ...]]) -> int:
+def count_fresh_range(ranges: list[tuple[int, int]]) -> int:
     count = 0
     highest_number: int = -999999999999999
     for working_range in ranges:
         highest_number = max(highest_number, working_range[0])
         count += max(0, working_range[1] - highest_number + 1)
-        if highest_number < working_range[1] + 1:
-            highest_number = working_range[1] + 1
+        highest_number = max(highest_number, working_range[1] + 1)
 
     return count
 
