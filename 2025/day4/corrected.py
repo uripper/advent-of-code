@@ -29,9 +29,12 @@ def solve(data: list[str]) -> int:
                         nr = row + dr
                         nc = col + dc
 
-                        if 0 <= nr < height and 0 <= nc < width:
-                            if grid[nr][nc] == "@":
-                                neighbors += 1
+                        if (
+                            0 <= nr < height 
+                            and 0 <= nc < width 
+                            and grid[nr][nc] == "@"
+                        ):
+                            neighbors += 1
 
                 if neighbors < 4:
                     removable.append((row, col))
